@@ -26,10 +26,6 @@ class ApartmentResource extends Resource
     {
         return $form
         ->schema([
-            TextInput::make('id')
-                ->disabled()
-                ->label('#ID'),
-
             Select::make('apartment_type')
                 ->label('Apartment Type')
                 ->options([
@@ -44,6 +40,9 @@ class ApartmentResource extends Resource
                 ->numeric()
                 ->required(),
 
+            Forms\Components\Select::make('gender')
+                ->options(['m' => 'Male', 'f' => 'Female']),
+
             TextInput::make('number')
                 ->label('Room Number')
                 ->numeric()
@@ -57,7 +56,7 @@ class ApartmentResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->alignCenter()
-                    ->label('`#ID'),
+                    ->label('#ID'),
 
                 TextColumn::make('apartment_type')
                     ->alignCenter()
@@ -65,9 +64,13 @@ class ApartmentResource extends Resource
                 
                 TextColumn::make('floor')
                     ->alignCenter()
-                    ->label('`Floor'),
+                    ->label('Floor'),
 
                 TextColumn::make('number')
+                    ->alignCenter()
+                    ->label('Room Number'),
+                
+                TextColumn::make('gender')
                     ->alignCenter()
                     ->label('Room Number'),
 

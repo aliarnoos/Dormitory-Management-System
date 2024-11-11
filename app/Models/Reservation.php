@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 class Reservation extends Model
 {
-    protected $fillables = [
+    protected $fillable = [
         'user_id',
         'room_id',
         'status',

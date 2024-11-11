@@ -24,13 +24,27 @@ class InspectionResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('reservation_id')
-                    ->relationship('reservation', 'id')
-                    ->required(),
+                ->label('Reservation')
+                ->options(function () {
+                    return \App\Models\Reservation::with('user')
+                        ->get()
+                        ->mapWithKeys(function ($reservation) {
+                            return [
+                                $reservation->id => "{$reservation->user->name} - {$reservation->semester} {$reservation->year}"
+                            ];
+                        });
+                })
+                ->required(),
+
                 Forms\Components\DateTimePicker::make('inspection_date')
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                    'Pending' => 'pending',
+                    'Done' => 'done',
+                    'Fined' => 'fined',
+                    ])                    
                     ->required()
-                    ->maxLength(255)
                     ->default('pending'),
             ]);
     }
@@ -41,6 +55,9 @@ class InspectionResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('reservation.id')
                     ->numeric()
+                    ->getStateUsing(function ($record) {
+                        return $record->reservation->user->name ?? 'N/A'; 
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('inspection_date')
                     ->dateTime()
@@ -84,8 +101,8 @@ class InspectionResource extends Resource
     {
         return [
             'index' => Pages\ListInspections::route('/'),
-            'create' => Pages\CreateInspection::route('/create'),
-            'edit' => Pages\EditInspection::route('/{record}/edit'),
+            // 'create' => Pages\CreateInspection::route('/create'),
+            // 'edit' => Pages\EditInspection::route('/{record}/edit'),
         ];
     }
 }

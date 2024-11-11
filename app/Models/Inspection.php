@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Inspection extends Model
 {
-    protected $fillables = [
+    protected $fillable = [
         'reservation_id',
         'inspection_date',
         'status',

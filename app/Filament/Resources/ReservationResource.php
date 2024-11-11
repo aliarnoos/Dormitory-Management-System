@@ -19,27 +19,59 @@ class ReservationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
 
+    /**
+     * @return Builder<Reservation>
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['room']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->searchable()
+                    ->disabledOn('edit')
+                    ->getOptionLabelUsing(fn ($value) => \App\Models\User::find($value)?->name)
                     ->required(),
+
                 Forms\Components\Select::make('room_id')
-                    ->relationship('room', 'id')
-                    ->required(),
+                    ->label('Room')
+                    ->options(function () {
+                        return \App\Models\Apartment::with('rooms')->get()->flatMap(function ($apartment) {
+                            return $apartment->rooms->mapWithKeys(function ($room) use ($apartment) {
+                                return [
+                                    $room->id => "Apartment {$apartment->number} - Floor {$apartment->floor} - Room {$room->room_number}"
+                                ];
+                            });
+                        });
+                    })
+                    ->required()
+                    ->searchable()
+                    ->getOptionLabelUsing(fn ($value) => \App\Models\Room::find($value)?->number),
+                
                 Forms\Components\TextInput::make('status')
                     ->required()
                     ->maxLength(255)
                     ->default('pending'),
-                Forms\Components\TextInput::make('semester')
+                Forms\Components\Select::make('semester')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'winter' => 'Winter',
+                        'summer' => 'Summer',
+                        'fall' => 'Fall',
+                        'spring' => 'Spring',
+                    ]),
+
                 Forms\Components\TextInput::make('year')
-                    ->required()
-                    ->maxLength(4),
-            ]);
+                    ->numeric()
+                    ->minValue(2000)
+                    ->maxValue(2030)
+                    ->default('2024')          
+                ]);
     }
 
     public static function table(Table $table): Table
@@ -49,9 +81,19 @@ class ReservationResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('room.id')
-                    ->numeric()
+                
+                Tables\Columns\TextColumn::make('user.email')
+                    ->alignCenter()
+                    ->label('Email'),
+
+                Tables\Columns\TextColumn::make('room_id')
+                    ->label('Room')
+                    ->alignCenter()
+                    ->formatStateUsing(function ($record) {
+                        return "Apartment {$record->room->apartment->number} - Room {$record->room->room_number}";
+                    })
                     ->sortable(),
+                
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('semester')
@@ -95,8 +137,8 @@ class ReservationResource extends Resource
     {
         return [
             'index' => Pages\ListReservations::route('/'),
-            'create' => Pages\CreateReservation::route('/create'),
-            'edit' => Pages\EditReservation::route('/{record}/edit'),
+            // 'create' => Pages\CreateReservation::route('/create'),
+            // 'edit' => Pages\EditReservation::route('/{record}/edit'),
         ];
     }
 }

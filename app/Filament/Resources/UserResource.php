@@ -32,13 +32,13 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('role')
                     ->maxLength(255)
                     ->default('student'),
-                Forms\Components\TextInput::make('gender')
-                    ->maxLength(1),
+                Forms\Components\Select::make('gender')
+                    ->options(['m' => 'Male', 'f' => 'Female']),
                 Forms\Components\Toggle::make('has_deposit'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                // Forms\Components\TextInput::make('password')
+                //     ->password()
+                //     ->required()
+                //     ->maxLength(255),
             ]);
     }
 
@@ -50,12 +50,14 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                // Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('role')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('gender')
+                    ->alignCenter()
                     ->searchable(),
                 Tables\Columns\IconColumn::make('has_deposit')
+                    ->alignCenter()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
