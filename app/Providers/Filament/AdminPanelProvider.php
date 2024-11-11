@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandLogo('/dms-logo.png')
             ->brandLogoHeight('4rem')
+            ->darkMode(false)
             ->login()
             ->colors([
                 'primary' => Color::Blue

@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
 
 class UserResource extends Resource
 {
@@ -86,6 +87,11 @@ class UserResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
     }
 
     public static function getPages(): array

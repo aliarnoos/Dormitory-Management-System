@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Facades\Filament;
 
 class ApartmentResource extends Resource
 {
@@ -93,6 +94,11 @@ class ApartmentResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
     }
 
     public static function getPages(): array

@@ -11,7 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Facades\Filament;
 
 class ReservationResource extends Resource
 {
@@ -53,9 +53,9 @@ class ReservationResource extends Resource
                     ->searchable()
                     ->getOptionLabelUsing(fn ($value) => \App\Models\Room::find($value)?->number),
                 
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
                     ->required()
-                    ->maxLength(255)
+                    ->options(['Pending' => 'pending', 'Canceled' => 'canceled', 'Completed' => 'completed'])
                     ->default('pending'),
                 Forms\Components\Select::make('semester')
                     ->required()
@@ -133,6 +133,11 @@ class ReservationResource extends Resource
         ];
     }
 
+    public static function canViewAny(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
+    }
+    
     public static function getPages(): array
     {
         return [
