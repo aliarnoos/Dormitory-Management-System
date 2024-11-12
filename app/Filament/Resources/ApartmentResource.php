@@ -22,6 +22,15 @@ class ApartmentResource extends Resource
     protected static ?string $model = Apartment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    
+
+    /**
+     * @return Builder<Apartment>
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['rooms']);
+    }
 
     public static function form(Form $form): Form
     {
@@ -72,8 +81,11 @@ class ApartmentResource extends Resource
                     ->label('Room Number'),
                 
                 TextColumn::make('gender')
+                    ->getStateUsing(function($state) {
+                        return $state == 'm' ? 'Male' : 'Female';
+                    })
                     ->alignCenter()
-                    ->label('Room Number'),
+                    ->label('Room for'),
 
             ])
             ->filters([

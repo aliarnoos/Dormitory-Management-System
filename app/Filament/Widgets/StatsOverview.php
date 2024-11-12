@@ -19,7 +19,7 @@ class StatsOverview extends BaseWidget
                 Reservation::where('status', 'pending')->count()
             )->description('Number of pending reservations')
             ->descriptionIcon('heroicon-m-clock')
-            ->color('primary'),
+            ->color('warning'),
             Stat::make(
                 'Inspections',
                 Inspection::where('status', 'pending')->count()
@@ -27,17 +27,17 @@ class StatsOverview extends BaseWidget
             ->descriptionIcon('heroicon-m-clock')
             ->color('info'),
             Stat::make(
-                'Users',
+                'Students',
                 User::where('role', 'student')->count()
             )->description('Number of students')
             ->descriptionIcon('heroicon-m-academic-cap')
             ->color('success'),
             Stat::make(
-                'Available Apartments',
+                'Available Rooms',
                 Room::where('is_available', true)->count()
-            )->description('Number of available apartments')
+            )->description('Number of available rooms')
             ->descriptionIcon('heroicon-m-home')
-            ->color('warning'),
+            ->color('primary'),
         ];
     }
 }

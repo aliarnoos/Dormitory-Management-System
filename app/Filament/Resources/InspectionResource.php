@@ -20,6 +20,14 @@ class InspectionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
+    /**
+     * @return Builder<Inspection>
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['reservation']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form

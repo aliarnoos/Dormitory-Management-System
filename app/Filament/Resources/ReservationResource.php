@@ -24,7 +24,7 @@ class ReservationResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['room']);
+        return parent::getEloquentQuery()->with(['room', 'user']);
     }
 
     public static function form(Form $form): Form
