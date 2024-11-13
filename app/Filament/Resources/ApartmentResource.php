@@ -24,13 +24,13 @@ class ApartmentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
     
 
-    /**
-     * @return Builder<Apartment>
-     */
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->with(['rooms']);
-    }
+    // /**
+    //  * @return Builder<Apartment>
+    //  */
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()->with(['rooms']);
+    // }
 
     public static function form(Form $form): Form
     {
@@ -81,8 +81,8 @@ class ApartmentResource extends Resource
                     ->label('Room Number'),
                 
                 TextColumn::make('gender')
-                    ->getStateUsing(function($state) {
-                        return $state == 'm' ? 'Male' : 'Female';
+                    ->getStateUsing(function($record) {
+                        return $record->gender == 'm' ? 'Male' : 'Female';
                     })
                     ->alignCenter()
                     ->label('Room for'),
