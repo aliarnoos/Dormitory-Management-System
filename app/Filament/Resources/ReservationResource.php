@@ -33,6 +33,7 @@ class ReservationResource extends Resource
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->options( \App\Models\User::all()->pluck('name', 'id'))
                     ->searchable()
                     ->disabledOn('edit')
                     ->getOptionLabelUsing(fn ($value) => \App\Models\User::find($value)?->name)
