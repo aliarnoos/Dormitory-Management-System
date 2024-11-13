@@ -19,10 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies();
-
-        Gate::define('view-dashboard', function ($user) {
-            return $user->role === 'admin'; // Only allow 'admin' role to access the dashboard
-        });
+        
     }
 }
