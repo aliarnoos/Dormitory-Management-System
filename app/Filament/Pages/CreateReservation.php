@@ -8,6 +8,7 @@ use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Facades\Filament;
 use App\Models\Reservation;
+use App\Models\Room;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions;
 
@@ -42,17 +43,22 @@ public function form(Forms\Form $form): Forms\Form
 
     protected function getFormSchema(): array
     {
+        $userGender = Filament::auth()->user()->gender; // Assuming 'gender' is stored in the users table.
+
         return [
 
             Forms\Components\Select::make('room_id')
             ->label('Room')
-            ->options(function () {
-                return \App\Models\Room::with('apartment')
+            ->options(function () use ($userGender) {
+                return Room::with('apartment')
+                    ->whereHas('apartment', function ($query) use ($userGender) {
+                        $query->where('gender', $userGender); // Match room's apartment gender to user's gender
+                    })
                     ->get()
-                    ->pluck('id', 'id') 
-                    ->mapWithKeys(function ($id) {
-                        $room = \App\Models\Room::find($id);
-                        return [$id => "Apartment {$room->apartment->number} - Floor {$room->apartment->floor} - Room {$room->room_number}"];
+                    ->mapWithKeys(function ($room) {
+                        return [
+                            $room->id => "Apartment {$room->apartment->number} - Floor {$room->apartment->floor} - Room {$room->room_number}",
+                        ];
                     });
             })
             ->required()

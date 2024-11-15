@@ -51,7 +51,7 @@ class ApartmentResource extends Resource
                 ->required(),
 
             Forms\Components\Select::make('gender')
-                ->options(['m' => 'Male', 'f' => 'Female']),
+                ->options(['male' => 'Male', 'female' => 'Female']),
 
             TextInput::make('number')
                 ->label('Room Number')
@@ -81,9 +81,6 @@ class ApartmentResource extends Resource
                     ->label('Room Number'),
                 
                 TextColumn::make('gender')
-                    ->getStateUsing(function($record) {
-                        return $record->gender == 'm' ? 'Male' : 'Female';
-                    })
                     ->alignCenter()
                     ->label('Room for'),
 
