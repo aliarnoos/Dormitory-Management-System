@@ -5,7 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\User;
 use Filament\Widgets\ChartWidget;
 
-class BlogPostsChart extends ChartWidget
+class GenderStaus extends ChartWidget
 {
     protected static ?string $heading = 'Students';
     protected function getData(): array
@@ -17,7 +17,7 @@ class BlogPostsChart extends ChartWidget
             ],
             'datasets' => [
                 [
-                    'data' => [User::where('gender', 'male')->count(), User::where('gender', 'female')->count()],
+                    'data' => [User::where('role', 'student')->where('gender', 'male')->count(), User::where('role', 'student')->where('gender', 'female')->count()],
                     'backgroundColor' => ['#36A2EB', '#FFC0CB'],
                 ]
             ],
