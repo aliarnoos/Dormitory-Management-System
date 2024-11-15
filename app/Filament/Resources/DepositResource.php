@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Facades\Filament;
 
 class DepositResource extends Resource
 {
@@ -94,6 +95,11 @@ class DepositResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Filament::auth()->user()->role === 'finance';
     }
 
     public static function getPages(): array
