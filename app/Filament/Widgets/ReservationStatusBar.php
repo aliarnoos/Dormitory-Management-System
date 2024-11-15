@@ -15,11 +15,11 @@ class ReservationStatusBar extends ChartWidget
             'labels' => [
                 'Pending',
                 'Completed',
-                'Cancelled',
+                'Canceled',
             ],
             'datasets' => [
                 [
-                    'data' => [Reservation::where('status', 'pending')->count(), Reservation::where('status', 'completed')->count(), Reservation::where('status', 'cancelled')->count()],
+                    'data' => [Reservation::where('status', 'pending')->count(), Reservation::where('status', 'completed')->count(), Reservation::where('status', 'canceled')->count()],
                     'backgroundColor' => ['#c4c4c4', '#4ebf00', '#a83232'],
                     'borderColor' => ['#ffffff'],
                 ]

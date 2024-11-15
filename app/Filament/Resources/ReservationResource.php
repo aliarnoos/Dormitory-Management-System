@@ -33,8 +33,9 @@ class ReservationResource extends Resource
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->options( \App\Models\User::all()->pluck('name', 'id'))
+                    ->options( \App\Models\User::where('role', 'student')->get()->pluck('name', 'id'))
                     ->searchable()
+                    ->label('Student Name')
                     ->disabledOn('edit')
                     ->getOptionLabelUsing(fn ($value) => \App\Models\User::find($value)?->name)
                     ->required(),
@@ -81,6 +82,7 @@ class ReservationResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
+                    ->label('Student Name')
                     ->sortable(),
                 
                 Tables\Columns\TextColumn::make('user.email')
