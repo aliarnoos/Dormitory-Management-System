@@ -17,7 +17,7 @@ class BlogPostsChart extends ChartWidget
             ],
             'datasets' => [
                 [
-                    'data' => [User::where('gender', 'm')->count(), User::where('gender', 'f')->count()],
+                    'data' => [User::where('gender', 'male')->count(), User::where('gender', 'female')->count()],
                     'backgroundColor' => ['#36A2EB', '#FFC0CB'],
                 ]
             ],

@@ -54,4 +54,9 @@ class User extends Authenticatable
     public function reservation(): HasOne {
         return $this->hasOne(Reservation::class);
     }
+
+    public function deposit(): HasOne
+    {
+        return $this->hasOne(Deposit::class);
+    }
 }
