@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Reservation;
 use Filament\Widgets\ChartWidget;
+use Filament\Facades\Filament;
 
 class ReservationStatusBar extends ChartWidget
 {
@@ -30,5 +31,10 @@ class ReservationStatusBar extends ChartWidget
     protected function getType(): string
     {
         return 'doughnut';
+    }
+
+    public static function canView(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
     }
 }

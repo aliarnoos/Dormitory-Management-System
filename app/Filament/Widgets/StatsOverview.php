@@ -8,6 +8,7 @@ use App\Models\Room;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\User;
+use Filament\Facades\Filament;
 
 class StatsOverview extends BaseWidget
 {
@@ -39,5 +40,10 @@ class StatsOverview extends BaseWidget
             ->descriptionIcon('heroicon-m-home')
             ->color('primary'),
         ];
+    }
+
+    public static function canView(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
     }
 }

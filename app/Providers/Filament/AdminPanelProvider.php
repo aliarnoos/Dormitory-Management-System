@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('4rem')
             ->darkMode(false)
             ->login()
+            ->registration()
             ->colors([
                 'primary' => Color::Blue
             ])
@@ -40,9 +41,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
+                Widgets\AccountWidget::class,
+                Widgets\FilamentInfoWidget::class,
             ])
+            ->renderHook( 
+                'panels::auth.login.form.after',
+                fn () => view('auth.socialite.google')
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

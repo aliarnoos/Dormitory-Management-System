@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\User;
 use Filament\Widgets\ChartWidget;
+use Filament\Facades\Filament;
 
 class GenderStaus extends ChartWidget
 {
@@ -27,5 +28,10 @@ class GenderStaus extends ChartWidget
     protected function getType(): string
     {
         return 'pie';
+    }
+
+    public static function canView(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
     }
 }
