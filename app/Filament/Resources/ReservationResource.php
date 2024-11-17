@@ -103,6 +103,13 @@ class ReservationResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('year')
                     ->searchable(),
+                
+                Tables\Columns\IconColumn::make('user.has_deposit')
+                    ->label('Has Deposit')
+                    ->boolean()
+                    ->alignCenter()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
