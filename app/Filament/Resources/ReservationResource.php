@@ -13,12 +13,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Facades\Filament;
 use App\Models\Room;
+use App\Notifications\ReservationApproved;
+use Filament\Forms\Components\DateTimePicker;
 
 class ReservationResource extends Resource
 {
     protected static ?string $model = Reservation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
+    
 
     /**
      * @return Builder<Reservation>
@@ -131,6 +134,19 @@ class ReservationResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('approve')
+                    ->label('Approve')
+                    ->color('success')
+                    ->action(function ($record, $data) {
+                        Reservation::where('id', $record->id)->update([
+                            'status' => 'completed'
+                        ]);
+
+                        $record->user->notify(new ReservationApproved($data['date']));
+                    })
+                    ->form([
+                        DateTimePicker::make('date')->required()
+                    ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
