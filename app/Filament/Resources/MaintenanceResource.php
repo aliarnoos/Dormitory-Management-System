@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MaintenanceResource\Pages;
 use App\Filament\Resources\MaintenanceResource\RelationManagers;
 use App\Models\Maintenance;
+use App\Notifications\MaintenanceNotification;
 use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -64,7 +66,16 @@ class MaintenanceResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('send-email')
+                    ->label('Send Email')
+                    ->form([
+                        DateTimePicker::make('date')->required()
+                    ])
+                    ->action(function ($record, $data) {
+                        $record->reservation->user->notify(new MaintenanceNotification($data['date']));
+                    })
+                ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
