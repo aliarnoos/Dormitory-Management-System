@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Facades\Filament;
+use App\Models\Room;
 
 class ReservationResource extends Resource
 {
@@ -43,13 +44,14 @@ class ReservationResource extends Resource
                 Forms\Components\Select::make('room_id')
                     ->label('Room')
                     ->options(function () {
-                        return \App\Models\Apartment::with('rooms')->get()->flatMap(function ($apartment) {
-                            return $apartment->rooms->mapWithKeys(function ($room) use ($apartment) {
+                        return Room::with('apartment')
+                            ->whereHas('apartment')
+                            ->get()
+                            ->mapWithKeys(function ($room) {
                                 return [
-                                    $room->id => "Apartment {$apartment->number} - Floor {$apartment->floor} - Room {$room->room_number}"
+                                    $room->id => "Apartment {$room->apartment->number} - Floor {$room->apartment->floor} - Room {$room->room_number}",
                                 ];
                             });
-                        });
                     })
                     ->required()
                     ->searchable()
@@ -103,6 +105,13 @@ class ReservationResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('year')
                     ->searchable(),
+                
+                Tables\Columns\IconColumn::make('user.has_deposit')
+                    ->label('Has Deposit')
+                    ->boolean()
+                    ->alignCenter()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -2,10 +2,13 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Maintenance;
 use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Facades\Filament;
+use App\Models\Reservation;
 
 class RequestMaintenance extends Page
 {
@@ -39,24 +42,45 @@ public function form(Forms\Form $form): Forms\Form
     protected function getFormSchema(): array
     {
         return [
-
-        Forms\Components\Textarea::make('issue')
-            ->required(),   
+        Forms\Components\TextInput::make('type')
+            ->required()
+            ->maxLength(255),
+        Forms\Components\Textarea::make('description')
+            ->required()
+            ->columnSpanFull(),
         ];
     }
 
     public function submit()
     {
         $data = $this->form->getState();
+
+        $userId = Filament::auth()->user()->id;
+    
+        // Find the latest reservation for the user
+        $latestReservation = Reservation::where('user_id', $userId)
+            ->latest('created_at') // Or 'id' if you prefer
+            ->first();
+    
+        // If a reservation exists, use its ID; otherwise, handle appropriately
+        if ($latestReservation) {
+            $data['reservation_id'] = $latestReservation->id;
+        } else {
+            // Handle the case where there is no reservation for the user
+            Notification::make()
+                ->title('No reservation found for this user.')
+                ->danger()
+                ->send();
+    
+            return;
+        }
         
-        // $data['user_id'] = Filament::auth()->user()->id;
-        // $data['status'] = 'pending';   
+        $data['status'] = 'pending';   
         
-        
-        // Reservation::create($data);
+        Maintenance::create($data);
 
         Notification::make()
-            ->title('Reservation created successfully!')
+            ->title('Request sent successfully!')
             ->success()
             ->send();
 
