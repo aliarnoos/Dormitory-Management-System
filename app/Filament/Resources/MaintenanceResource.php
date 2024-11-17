@@ -12,19 +12,28 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Facades\Filament;
 
 class MaintenanceResource extends Resource
 {
     protected static ?string $model = Maintenance::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('reservation_id')
-                    ->relationship('reservation', 'id')
+                    ->options(function () {
+                        return \App\Models\Reservation::with('user')
+                            ->get()
+                            ->mapWithKeys(function ($reservation) {
+                                return [
+                                    $reservation->id => "{$reservation->user->name} - {$reservation->semester} {$reservation->year}"
+                                ];
+                            });
+                    })                    
                     ->required(),
                 Forms\Components\TextInput::make('type')
                     ->required()
@@ -45,7 +54,26 @@ class MaintenanceResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('reservation.id')
                     ->numeric()
+                    ->getStateUsing(function ($record) {
+                        return $record->reservation->user->name ?? 'N/A'; 
+                    })
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('room_details')
+                    ->label('Room Details')
+                    ->getStateUsing(function ($record) {
+                        $reservation = $record->reservation;
+    
+                        if ($reservation && $reservation->room) {
+                            $floor = $reservation->room->apartment->floor ?? 'N/A';
+                            $roomNumber = $reservation->room->room_number ?? 'N/A';
+                            return "Floor {$floor}, Room {$roomNumber}";
+                        }
+    
+                        return 'N/A';
+                    })
+                    ->sortable(),
+                    
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
@@ -79,12 +107,18 @@ class MaintenanceResource extends Resource
         ];
     }
 
+    public static function canViewAny(): bool
+    {
+        return Filament::auth()->user()->role === 'fmd';
+    }
+    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListMaintenances::route('/'),
-            'create' => Pages\CreateMaintenance::route('/create'),
-            'edit' => Pages\EditMaintenance::route('/{record}/edit'),
+            // 'create' => Pages\CreateMaintenance::route('/create'),
+            // 'edit' => Pages\EditMaintenance::route('/{record}/edit'),
         ];
     }
 }
