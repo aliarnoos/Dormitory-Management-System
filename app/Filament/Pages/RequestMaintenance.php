@@ -44,11 +44,11 @@ public function form(Forms\Form $form): Forms\Form
         return [
         Forms\Components\Select::make('type')
             ->options([
-                'AC' => 'ac',
+                'AC' => 'AC',
                 'Heater' => 'Heater',
-                'Water Leakage' => 'water leakage',
-                'Lights' => 'lights',
-                'Bathroom' => 'bathroom'
+                'Water Leakage' => 'Water Leakage',
+                'Lights' => 'Lights',
+                'Bathroom' => 'Bathroom'
             ])
             ->required(),
         Forms\Components\Textarea::make('description')
