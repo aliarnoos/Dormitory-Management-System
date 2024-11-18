@@ -42,9 +42,15 @@ public function form(Forms\Form $form): Forms\Form
     protected function getFormSchema(): array
     {
         return [
-        Forms\Components\TextInput::make('type')
-            ->required()
-            ->maxLength(255),
+        Forms\Components\Select::make('type')
+            ->options([
+                'AC' => 'ac',
+                'Heater' => 'Heater',
+                'Water Leakage' => 'water leakage',
+                'Lights' => 'lights',
+                'Bathroom' => 'bathroom'
+            ])
+            ->required(),
         Forms\Components\Textarea::make('description')
             ->required()
             ->columnSpanFull(),
