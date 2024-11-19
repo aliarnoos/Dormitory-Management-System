@@ -63,7 +63,7 @@ class ReservationResource extends Resource
                 
                 Forms\Components\Select::make('status')
                     ->required()
-                    ->options(['Pending' => 'pending', 'Canceled' => 'canceled', 'Completed' => 'completed'])
+                    ->options(['Pending' => 'pending', 'Canceled' => 'canceled', 'Completed' => 'completed', 'Checkedout' => 'checkedout'])
                     ->default('pending'),
                 Forms\Components\Select::make('semester')
                     ->required()
