@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Facades\Filament;
+use Filament\Tables\Filters\SelectFilter;
 
 class MaintenanceResource extends Resource
 {
@@ -37,9 +38,16 @@ class MaintenanceResource extends Resource
                             });
                     })                    
                     ->required(),
-                Forms\Components\TextInput::make('type')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'AC' => 'AC',
+                        'Heater' => 'Heater',
+                        'Water Leakage' => 'Water Leakage',
+                        'Lights' => 'Lights',
+                        'Bathroom' => 'Bathroom'
+                    ])
+                    ->required(),
+                    
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
@@ -90,7 +98,15 @@ class MaintenanceResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('type')
+                    ->label('Type')
+                    ->options([
+                        'AC' => 'AC',
+                        'Heater' => 'Heater',
+                        'Water Leakage' => 'Water Leakage',
+                        'Lights' => 'Lights',
+                        'Bathroom' => 'Bathroom'
+                    ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
