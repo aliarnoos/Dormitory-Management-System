@@ -108,6 +108,11 @@ class UserResource extends Resource
         return Filament::auth()->user()->role === 'fmd';
     }
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function getPages(): array
     {
         return [
