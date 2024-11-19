@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Facades\Filament;
+use Filament\Tables\Filters\SelectFilter;
 
 class UserResource extends Resource
 {
@@ -28,14 +29,20 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\FileUpload::make('image')
-                    ->image(),
-                Forms\Components\TextInput::make('role')
-                    ->maxLength(255)
-                    ->default('student'),
+
+                Forms\Components\Select::make('role')
+                ->options([
+                    'fmd' => 'fmd',
+                    'finance' => 'finance',
+                    'student' => 'student'
+                ])
+                ->required(),
+
                 Forms\Components\Select::make('gender')
-                    ->options(['m' => 'Male', 'f' => 'Female']),
-                Forms\Components\Toggle::make('has_deposit'),
+                    ->disabled(fn($get) => $get('role') !== 'student')
+                    ->visible(fn($get) => $get('role') == 'student')
+                    ->options(['male' => 'male', 'female' => 'female']),
+                // Forms\Components\Toggle::make('has_deposit'),
                 // Forms\Components\TextInput::make('password')
                 //     ->password()
                 //     ->required()
@@ -70,7 +77,13 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true)
             ])
             ->filters([
-                //
+                SelectFilter::make('role')
+                    ->label('Role')
+                    ->options([
+                        'fmd' => 'FMD',
+                        'finance' => 'Finance',
+                        'student' => 'Student',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -15,6 +15,7 @@ use Filament\Facades\Filament;
 use App\Models\Room;
 use App\Notifications\ReservationApproved;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Filters\SelectFilter;
 
 class ReservationResource extends Resource
 {
@@ -129,7 +130,14 @@ class ReservationResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('semester')
+                    ->label('Semester')
+                    ->options([
+                        'winter' => 'Winter',
+                        'summer' => 'Summer',
+                        'fall' => 'Fall',
+                        'spring' => 'Spring',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
