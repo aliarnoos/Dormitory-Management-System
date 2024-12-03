@@ -85,6 +85,7 @@ class ApartmentResource extends Resource
                     ->label('Room for'),
 
             ])
+            ->defaultGroup('apartment_type')
             ->filters([
                 //
             ])
