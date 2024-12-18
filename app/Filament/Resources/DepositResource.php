@@ -33,10 +33,10 @@ class DepositResource extends Resource
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('currency')
-                    ->required()
-                    ->maxLength(255)
-                    ->default('IQD'),
+                // Forms\Components\TextInput::make('currency')
+                //     ->required()
+                //     ->maxLength(255)
+                //     ->default('IQD'),
                 Forms\Components\DatePicker::make('date')
                     ->required(),
                 Forms\Components\Select::make('status')

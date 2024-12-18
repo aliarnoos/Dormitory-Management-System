@@ -44,7 +44,7 @@ class CreateReservation extends Page implements HasForms
 
     protected function getFormSchema(): array
     {
-        $userGender = Filament::auth()->user()->gender; // Assuming 'gender' is stored in the users table.
+        $userGender = Filament::auth()->user()->gender;
 
  
         return [
