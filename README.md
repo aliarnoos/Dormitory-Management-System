@@ -30,14 +30,11 @@ npm install
 
 # Configure the Environment
 cp .env.example .env
-# Update .env with database credentials and Google OAuth keys
+# Update .env with database credentials
 # Example:
 # DB_DATABASE=dms
 # DB_USERNAME=root
 # DB_PASSWORD=yourpassword
-# GOOGLE_CLIENT_ID=your_google_client_id
-# GOOGLE_CLIENT_SECRET=your_google_client_secret
-# GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
 
 # Generate App Key
 php artisan key:generate
