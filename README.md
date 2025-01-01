@@ -23,9 +23,6 @@ The **Dormitory Management System (DMS)** is a web-based application designed to
 
 ## **Installation and Setup**
 ```bash
-# Clone the Repository
-git clone https://github.com/yourusername/dormitory-management-system.git
-cd dormitory-management-system
 
 # Install Dependencies
 composer install
